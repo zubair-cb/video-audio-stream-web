@@ -11,9 +11,12 @@ import './App.css';
 
 function App() {
 
-  const [videoSteams, setVideoStreams] = useState(['http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/WhatCarCanYouGetForAGrand.mp4']);
+  // const [videoSteams, setVideoStreams] = useState(['http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/WhatCarCanYouGetForAGrand.mp4']);
+  const [videoSteams, setVideoStreams] = useState(['https://storage.googleapis.com/exoplayer-test-media-1/mp4/frame-counter-one-hour.mp4', 'https://html5demos.com/assets/dizzy.mp4']);
   const [audioStreams, setAudioStreams] = useState(['https://files.thenaatsharif.com/downloads/sahir-ali-bagga/Pakistan-Zindabad-Song-MP3-Download-By-Sahir-Ali-Bagga.mp3', 'http://commondatastorage.googleapis.com/codeskulptor-demos/DDR_assets/Kangaroo_MusiQue_-_The_Neverwritten_Role_Playing_Game.mp3']);
   const [isPlaying, setIsPlaying] = useState(false);
+  const [isDataReady, setDataReady] = useState([false, false, false]);
+  const showControls = useState(false)[0]; 
 
   useEffect(() => {
     // setVideoStreams(['http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/WhatCarCanYouGetForAGrand.mp4']);
@@ -22,8 +25,24 @@ function App() {
   }, [])
 
   
+  async function setVideoReady() {
+    console.log("Video is Ready")
+    isDataReady[0] = true;
+  }
+  async function setAudioReady() {
+    console.log("Audio is Ready")
+    isDataReady[1] = true;
+  }
+  async function setMusicReady() {
+    console.log("Music is Ready")
+    isDataReady[2] = true;
+  }
 
   async function play(e) {
+    if(isDataReady[0] === false || isDataReady[1] === false || isDataReady[2] === false){
+      return;
+    }
+
     let audio = document.querySelectorAll('audio');
     let video = document.querySelectorAll('video');
 
@@ -60,10 +79,14 @@ function App() {
 
     audio[1].load();
     audio[0].load();
+    isDataReady[1] = false;
+    isDataReady[2] = false;
+    isDataReady[0] = false;
+    setIsPlaying(false)
 
-    audio[0].play();
-    audio[1].play();
-    video[0].play();
+    // audio[0].play();
+    // audio[1].play();
+    // video[0].play();
   }
 
   function selectAudioStream(e) {
@@ -76,10 +99,14 @@ function App() {
 
     audio[1].load();
     video[0].load();
+    isDataReady[1] = false;
+    isDataReady[2] = false;
+    isDataReady[0] = false;
+    setIsPlaying(false)
 
-    audio[0].play();
-    audio[1].play();
-    video[0].play();
+    // audio[0].play();
+    // audio[1].play();
+    // video[0].play();
   }
 
   async function selectMusicStream(e) {
@@ -90,10 +117,14 @@ function App() {
 
     audio[0].load();
     video[0].load();
+    isDataReady[1] = false;
+    isDataReady[2] = false;
+    isDataReady[0] = false;
+    setIsPlaying(false)
 
-    audio[0].play();
-    audio[1].play();
-    video[0].play();
+    // audio[0].play();
+    // audio[1].play();
+    // video[0].play();
   }
 
   async function onEnded(e){
@@ -122,7 +153,21 @@ function App() {
     audio[1].currentTime = selectedDuration;
   }
 
+  async function onVideoBuffering(e) {
+    console.log("Buffering")
+    const audio = document.querySelectorAll('audio');
 
+    audio[0].pause()
+    audio[1].pause()
+
+  }
+
+  async function onVideoPlaying(e) {
+    const audio = document.querySelectorAll('audio');
+
+    audio[0].play()
+    audio[1].play()
+  }
 
   return (
 
@@ -131,19 +176,20 @@ function App() {
       <div className = "Main">
 
       
-        <video width="80%" poster="" muted onEnded={onEnded}>
+        <video width="80%" poster="" muted onEnded={onEnded} onWaiting={onVideoBuffering} onPlaying={onVideoPlaying} controls={showControls} onLoadedData={setVideoReady}>
         <source
           src={videoSteams[0]}
-          type="video/mp4" />
+          type="video/mp4"
+          />
         </video>
 
-        <audio id='audioStream' onEnded={onEnded}>
+        <audio id='audioStream' onEnded={onEnded} controls={showControls} onLoadedData={setAudioReady}>
           <source  
           src={audioStreams[0]}
           type='audio/mp3'/>
         </audio>
 
-        <audio className='musicStream' onEnded={onEnded}>
+        <audio className='musicStream' onEnded={onEnded} controls={showControls} onLoadedData={setMusicReady}>
           <source 
           src={audioStreams[1]}
           type='audio/mp3'/>
