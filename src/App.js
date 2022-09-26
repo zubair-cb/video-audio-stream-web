@@ -12,11 +12,14 @@ import './App.css';
 function App() {
 
   // const [videoSteams, setVideoStreams] = useState(['http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/WhatCarCanYouGetForAGrand.mp4']);
-  const [videoSteams, setVideoStreams] = useState(['https://storage.googleapis.com/exoplayer-test-media-1/mp4/frame-counter-one-hour.mp4', 'https://html5demos.com/assets/dizzy.mp4']);
-  const [audioStreams, setAudioStreams] = useState(['https://files.thenaatsharif.com/downloads/sahir-ali-bagga/Pakistan-Zindabad-Song-MP3-Download-By-Sahir-Ali-Bagga.mp3', 'http://commondatastorage.googleapis.com/codeskulptor-demos/DDR_assets/Kangaroo_MusiQue_-_The_Neverwritten_Role_Playing_Game.mp3']);
+  const [videoSteams] = useState(['https://storage.googleapis.com/exoplayer-test-media-1/mp4/frame-counter-one-hour.mp4', 'https://html5demos.com/assets/dizzy.mp4']);
+  const [audioStreams] = useState(['https://files.thenaatsharif.com/downloads/sahir-ali-bagga/Pakistan-Zindabad-Song-MP3-Download-By-Sahir-Ali-Bagga.mp3', 'http://commondatastorage.googleapis.com/codeskulptor-demos/DDR_assets/Kangaroo_MusiQue_-_The_Neverwritten_Role_Playing_Game.mp3']);
   const [isPlaying, setIsPlaying] = useState(false);
-  const [isDataReady, setDataReady] = useState([false, false, false]);
-  const showControls = useState(false)[0]; 
+  const [isDataReady] = useState([false, false, false]);
+  const [showControls] = useState(false); 
+  const [seekValue, setSeekValue] = useState(0);
+  const [streamDurations] = useState([]);
+  
 
   useEffect(() => {
     // setVideoStreams(['http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/WhatCarCanYouGetForAGrand.mp4']);
@@ -25,16 +28,19 @@ function App() {
   }, [])
 
   
-  async function setVideoReady() {
+  async function setVideoReady(e) {
     console.log("Video is Ready")
+    streamDurations[0] = e.target.duration;
     isDataReady[0] = true;
   }
-  async function setAudioReady() {
+  async function setAudioReady(e) {
     console.log("Audio is Ready")
+    streamDurations[1] = e.target.duration;
     isDataReady[1] = true;
   }
-  async function setMusicReady() {
-    console.log("Music is Ready")
+  async function setMusicReady(e) {
+    console.log("Music is Ready");
+    streamDurations[2] = e.target.duration;
     isDataReady[2] = true;
   }
 
@@ -151,6 +157,17 @@ function App() {
     audio[0].currentTime = selectedDuration;
     video[0].currentTime = selectedDuration;
     audio[1].currentTime = selectedDuration;
+    setSeekValue(selectedDuration);
+  }
+
+  async function updateSeekBar(e) {
+    // const audio = document.querySelectorAll('audio');
+    // const video = document.querySelectorAll('video');
+
+    // const minDuration = Math.min(audio[0].duration, audio[1].duration, video[0].duration);
+    setSeekValue(e.target.currentTime);
+    // console.log(e.target.currentTime);
+
   }
 
   async function onVideoBuffering(e) {
@@ -169,6 +186,8 @@ function App() {
     audio[1].play()
   }
 
+
+
   return (
 
     <div className="App">
@@ -176,7 +195,7 @@ function App() {
       <div className = "Main">
 
       
-        <video width="80%" poster="" muted onEnded={onEnded} onWaiting={onVideoBuffering} onPlaying={onVideoPlaying} controls={showControls} onLoadedData={setVideoReady}>
+        <video width="80%" poster="" muted onEnded={onEnded} onWaiting={onVideoBuffering} onPlaying={onVideoPlaying} controls={showControls} onLoadedData={setVideoReady} onTimeUpdate={updateSeekBar}>
         <source
           src={videoSteams[0]}
           type="video/mp4"
@@ -205,7 +224,7 @@ function App() {
 
       <div className='Controls'>
 
-        <Slider size='small' aria-label="Duration slider" valueLabelDisplay onChange={durationUpdate} />
+        <Slider size='small' aria-label="Duration slider" value={seekValue} valueLabelDisplay onChange={durationUpdate} max={Math.min(streamDurations[0], streamDurations[1], streamDurations[2])} />
 
       </div>
 
