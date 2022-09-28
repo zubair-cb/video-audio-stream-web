@@ -22,9 +22,6 @@ function App() {
   
 
   useEffect(() => {
-    // setVideoStreams(['http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/WhatCarCanYouGetForAGrand.mp4']);
-    // setAudioStreams(['http://commondatastorage.googleapis.com/codeskulptor-demos/DDR_assets/Kangaroo_MusiQue_-_The_Neverwritten_Role_Playing_Game.mp3']);
-    // setMusicStreams(['https://files.thenaatsharif.com/downloads/sahir-ali-bagga/Pakistan-Zindabad-Song-MP3-Download-By-Sahir-Ali-Bagga.mp3']);
   }, [])
 
   
