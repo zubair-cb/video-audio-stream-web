@@ -16,7 +16,7 @@ function App() {
   const [audioStreams] = useState(['https://ik.imagekit.io/rmtai4fs5/audio/1%20final%20d%208-19-22.mp3', 'https://ik.imagekit.io/rmtai4fs5/audio/3%20-%20final%20E%20-%208-22-22.mp3', 'https://ik.imagekit.io/rmtai4fs5/audio/3%20-%20rife.mp3', 'https://ik.imagekit.io/rmtai4fs5/audio/4%20-%20final%20E%20-%208-22-22.mp3', 'https://ik.imagekit.io/rmtai4fs5/audio/6%20-%20rife.mp3', 'https://ik.imagekit.io/rmtai4fs5/audio/rife%20sine%20example.mp3']);
   const [isPlaying, setIsPlaying] = useState(false);
   const [isDataReady] = useState([false, false, false]);
-  const [showControls] = useState(true); 
+  const [showControls] = useState(false); 
   const [seekValue, setSeekValue] = useState(0);
   const [streamDurations] = useState([]);
   
@@ -146,13 +146,11 @@ function App() {
   }
 
   async function durationUpdate(e) {
-
     const audio = document.querySelectorAll('audio');
     const video = document.querySelectorAll('video');
     
-    const minDuration = Math.min(audio[0].duration, audio[1].duration, video[0].duration);
-
-    const selectedDuration = minDuration * (e.target.value / 100);
+    const selectedDuration = e.target.value;
+    console.log(selectedDuration);
 
 
     audio[0].currentTime = selectedDuration;
@@ -223,11 +221,11 @@ function App() {
 
       </div>
 
-      <div className='Controls'>
+        <Slider size='large' aria-label="Duration slider" value={seekValue} valueLabelDisplay onChange={durationUpdate} max={Math.min(streamDurations[0], streamDurations[1], streamDurations[2])} />
+      {/* <div className='Controls'>
 
-        <Slider size='small' aria-label="Duration slider" value={seekValue} valueLabelDisplay onChange={durationUpdate} max={Math.min(streamDurations[0], streamDurations[1], streamDurations[2])} />
 
-      </div>
+      </div> */}
 
 
 
