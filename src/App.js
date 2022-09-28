@@ -12,11 +12,11 @@ import './App.css';
 function App() {
 
   // const [videoSteams, setVideoStreams] = useState(['http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/WhatCarCanYouGetForAGrand.mp4']);
-  const [videoSteams] = useState(['https://storage.googleapis.com/exoplayer-test-media-1/mp4/frame-counter-one-hour.mp4', 'https://html5demos.com/assets/dizzy.mp4']);
-  const [audioStreams] = useState(['https://files.thenaatsharif.com/downloads/sahir-ali-bagga/Pakistan-Zindabad-Song-MP3-Download-By-Sahir-Ali-Bagga.mp3', 'http://commondatastorage.googleapis.com/codeskulptor-demos/DDR_assets/Kangaroo_MusiQue_-_The_Neverwritten_Role_Playing_Game.mp3']);
+  const [videoSteams] = useState(['https://ik.imagekit.io/rmtai4fs5/The.Bad.Guys.2022.1080p.BluRay.H264.AAC-RARBG.mp4', 'https://ik.imagekit.io/rmtai4fs5/be7b878b5c644689ca8dc129f92aabac130f43c8.mp4', 'https://ik.imagekit.io/rmtai4fs5/f3bc38bed9928f4b689401180ecec285a23ac2f7.mp4', 'https://ik.imagekit.io/rmtai4fs5/ecc14820cfb4d2cc7fb0dcb114c4500b2f043c6a%20(4).mp4', 'https://ik.imagekit.io/rmtai4fs5/FX6%200149_stabilized_colored_final.mp4']);
+  const [audioStreams] = useState(['https://ik.imagekit.io/rmtai4fs5/audio/1%20final%20d%208-19-22.mp3', 'https://ik.imagekit.io/rmtai4fs5/audio/3%20-%20final%20E%20-%208-22-22.mp3', 'https://ik.imagekit.io/rmtai4fs5/audio/3%20-%20rife.mp3', 'https://ik.imagekit.io/rmtai4fs5/audio/4%20-%20final%20E%20-%208-22-22.mp3', 'https://ik.imagekit.io/rmtai4fs5/audio/6%20-%20rife.mp3', 'https://ik.imagekit.io/rmtai4fs5/audio/rife%20sine%20example.mp3']);
   const [isPlaying, setIsPlaying] = useState(false);
   const [isDataReady] = useState([false, false, false]);
-  const [showControls] = useState(false); 
+  const [showControls] = useState(true); 
   const [seekValue, setSeekValue] = useState(0);
   const [streamDurations] = useState([]);
   
@@ -45,7 +45,8 @@ function App() {
   }
 
   async function play(e) {
-    if(isDataReady[0] === false || isDataReady[1] === false || isDataReady[2] === false){
+    if (isDataReady.includes(false)){
+    // if(isDataReady[0] === false || isDataReady[1] === false || isDataReady[2] === false){
       return;
     }
 
