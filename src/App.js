@@ -149,6 +149,8 @@ function App() {
     isDataReady[1] = false;
     isDataReady[2] = false;
     isDataReady[0] = false;
+    setPlayPauseButtonText('Play')
+    setPlaySeekControl(false)
     setIsPlaying(false)
 
     // audio[0].play();
@@ -172,6 +174,8 @@ function App() {
     isDataReady[1] = false;
     isDataReady[2] = false;
     isDataReady[0] = false;
+    setPlayPauseButtonText('Play')
+    setPlaySeekControl(false)
     setIsPlaying(false)
 
     // audio[0].play();
@@ -195,6 +199,8 @@ function App() {
     isDataReady[1] = false;
     isDataReady[2] = false;
     isDataReady[0] = false;
+    setPlayPauseButtonText('Play')
+    setPlaySeekControl(false)
     setIsPlaying(false)
 
     // audio[0].play();
