@@ -1,34 +1,86 @@
 import { MenuItem, Select, Stack, Box, InputLabel, FormControl, Slider } from '@mui/material';
 import Button from '@mui/joy/Button'
-// import Slider from '@mui/joy/Slider';
 import React, { useEffect, useState } from 'react';
 import VolumeDown from '@mui/icons-material/VolumeDown';
 import VolumeUp from '@mui/icons-material/VolumeUp';
+import CircularProgress from '@mui/material/CircularProgress';
 import './App.css';
-
-
 
 
 function App() {
 
-  // const [videoSteams, setVideoStreams] = useState(['http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/WhatCarCanYouGetForAGrand.mp4']);
-  const [videoSteams] = useState(['https://ik.imagekit.io/rmtai4fs5/The.Bad.Guys.2022.1080p.BluRay.H264.AAC-RARBG.mp4', 'https://ik.imagekit.io/rmtai4fs5/be7b878b5c644689ca8dc129f92aabac130f43c8.mp4', 'https://ik.imagekit.io/rmtai4fs5/f3bc38bed9928f4b689401180ecec285a23ac2f7.mp4', 'https://ik.imagekit.io/rmtai4fs5/ecc14820cfb4d2cc7fb0dcb114c4500b2f043c6a%20(4).mp4', 'https://ik.imagekit.io/rmtai4fs5/FX6%200149_stabilized_colored_final.mp4']);
-  const [audioStreams] = useState(['https://ik.imagekit.io/rmtai4fs5/audio/1%20final%20d%208-19-22.mp3', 'https://ik.imagekit.io/rmtai4fs5/audio/3%20-%20final%20E%20-%208-22-22.mp3', 'https://ik.imagekit.io/rmtai4fs5/audio/3%20-%20rife.mp3', 'https://ik.imagekit.io/rmtai4fs5/audio/4%20-%20final%20E%20-%208-22-22.mp3', 'https://ik.imagekit.io/rmtai4fs5/audio/6%20-%20rife.mp3', 'https://ik.imagekit.io/rmtai4fs5/audio/rife%20sine%20example.mp3']);
+  const [videoSteams] = useState([
+    {
+      "name": "Colored Final",
+      "url": "https://ik.imagekit.io/rmtai4fs5/FX6%200149_stabilized_colored_final.mp4"
+    },
+    {
+      "name": "The Bad Guys",
+      "url": "https://ik.imagekit.io/rmtai4fs5/The.Bad.Guys.2022.1080p.BluRay.H264.AAC-RARBG.mp4"
+    },
+    {
+      "name": "Fireheart",
+      "url": "https://ik.imagekit.io/rmtai4fs5/be7b878b5c644689ca8dc129f92aabac130f43c8.mp4"
+    },
+    {
+      "name": "Nickelodeon",
+      "url": "https://ik.imagekit.io/rmtai4fs5/f3bc38bed9928f4b689401180ecec285a23ac2f7.mp4"
+    },
+    {
+      "name": "Get Car For A Grand",
+      "url": "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/WhatCarCanYouGetForAGrand.mp4"
+    },
+  ]);
+  const [musicStreams] = useState([
+    {
+      "name": "Final 4",
+      "url": "https://ik.imagekit.io/rmtai4fs5/audio/4%20-%20final%20E%20-%208-22-22.mp3"
+    },
+    {
+      "name": "The Never written role",
+      "url": "http://commondatastorage.googleapis.com/codeskulptor-demos/DDR_assets/Kangaroo_MusiQue_-_The_Neverwritten_Role_Playing_Game.mp3"
+    },
+  ]);
+  const [audioStreams] = useState([
+    {
+      "name": "Rife 3",
+      "url": "https://ik.imagekit.io/rmtai4fs5/audio/3%20-%20rife.mp3"
+    },
+    {
+      "name": "Rife 6",
+      "url": "https://ik.imagekit.io/rmtai4fs5/audio/6%20-%20rife.mp3"
+    },
+    {
+      "name": "Rife sine Example",
+      "url": "https://ik.imagekit.io/rmtai4fs5/audio/rife%20sine%20example.mp3"
+    },
+    {
+      "name": "Final 1",
+      "url": "https://ik.imagekit.io/rmtai4fs5/audio/1%20final%20d%208-19-22.mp3"
+    },
+    {
+      "name": "Final 3",
+      "url": "https://ik.imagekit.io/rmtai4fs5/audio/3%20-%20final%20E%20-%208-22-22.mp3"
+    },
+  ])
   const [isPlaying, setIsPlaying] = useState(false);
   const [isDataReady] = useState([false, false, false]);
   const [showControls] = useState(false); 
   const [seekValue, setSeekValue] = useState(0);
   const [streamDurations] = useState([]);
+  const [playSeekControl, setPlaySeekControl] = useState(false);
+  const [playPauseButtonText, setPlayPauseButtonText] = useState("Play");
   
 
   useEffect(() => {
-  }, [])
+  }, [isDataReady])
 
   
   async function setVideoReady(e) {
     console.log("Video is Ready")
     streamDurations[0] = e.target.duration;
     isDataReady[0] = true;
+    setPlaySeekControl(true);
   }
   async function setAudioReady(e) {
     console.log("Audio is Ready")
@@ -44,6 +96,8 @@ function App() {
   async function play(e) {
     if (isDataReady.includes(false)){
     // if(isDataReady[0] === false || isDataReady[1] === false || isDataReady[2] === false){
+      // e.target.innerText = "Play"
+      setPlayPauseButtonText('Play')
       return;
     }
 
@@ -51,16 +105,19 @@ function App() {
     let video = document.querySelectorAll('video');
 
     if(isPlaying) {
-      await audio[0].pause();
-      await audio[1].pause();
-      await video[0].pause();
+      // e.target.innerText = "Play"
+      setPlayPauseButtonText('Play')
+      audio[0].pause();
+      audio[1].pause();
+      video[0].pause();
       setIsPlaying(false);
       return;
     }
-  
-    await audio[0].play();
-    await audio[1].play()
-    await video[0].play();
+    // e.target.innerText = "Pause"
+    setPlayPauseButtonText('Pause')
+    audio[0].play();
+    audio[1].play()
+    video[0].play();
     setIsPlaying(true);
 
   }
@@ -78,9 +135,15 @@ function App() {
   function selectVideoStream(e) {
     if(e.target.outerText === "") return;
     const audio = document.querySelectorAll('audio');
-    const video = document.querySelectorAll('video')
-    video[0].setAttribute("src", e.target.outerText);
+    const video = document.querySelectorAll('video');
 
+    const videoIndex = videoSteams.findIndex(obj => obj.name === e.target.innerText);
+    const videoUrl = videoSteams[videoIndex].url;
+
+    if(video[0].getAttribute("src") === videoUrl) return;
+    
+
+    video[0].setAttribute("src", videoUrl);
     audio[1].load();
     audio[0].load();
     isDataReady[1] = false;
@@ -97,9 +160,12 @@ function App() {
     if(e.target.outerText === "") return;
     const audio = document.querySelectorAll('audio');
     const video = document.querySelectorAll('video');
-    if(audio[0].getAttribute("src") === e.target.outerText) return;
-    audio[0].setAttribute("src", e.target.outerText);
 
+    const audioIndex = audioStreams.findIndex(obj => obj.name === e.target.innerText);
+    const audioUrl = audioStreams[audioIndex].url;
+
+    if(audio[0].getAttribute("src") === audioUrl) return;
+    audio[0].setAttribute("src", audioUrl);
 
     audio[1].load();
     video[0].load();
@@ -117,7 +183,12 @@ function App() {
     if(e.target.outerText === "") return;
     const audio = document.querySelectorAll('audio');
     const video = document.querySelectorAll('video')
-    audio[1].setAttribute("src", e.target.outerText);
+
+    const musicIndex = musicStreams.findIndex(obj => obj.name === e.target.innerText);
+    const musicUrl = musicStreams[musicIndex].url;
+
+    if(audio[1].getAttribute("src") === musicUrl) return;
+    audio[1].setAttribute("src", musicUrl);
 
     audio[0].load();
     video[0].load();
@@ -149,7 +220,6 @@ function App() {
     const selectedDuration = e.target.value;
     console.log(selectedDuration);
 
-
     audio[0].currentTime = selectedDuration;
     video[0].currentTime = selectedDuration;
     audio[1].currentTime = selectedDuration;
@@ -167,7 +237,8 @@ function App() {
   }
 
   async function onVideoBuffering(e) {
-    console.log("Buffering")
+    console.log("Video Buffering")
+    setPlaySeekControl(false)
     const audio = document.querySelectorAll('audio');
 
     audio[0].pause()
@@ -175,42 +246,84 @@ function App() {
 
   }
 
+  // async function onAudioBuffering(e) {
+  //   console.log("Audio Buffering");
+  //   const audio = document.querySelectorAll('audio');
+  //   const video = document.querySelectorAll('video'); 
+
+  //   audio[1].pause()
+  //   video[0].pause()
+  // }
+
+  // async function onMusicBuffering(e){
+  //   console.log("Music Buffering");
+  //   const audio = document.querySelectorAll('audio');
+  //   const video = document.querySelectorAll('video'); 
+
+  //   audio[0].pause()
+  //   video[0].pause()
+  // }
+
   async function onVideoPlaying(e) {
+    console.log("video playing after buffering")
+    setPlaySeekControl(true)
     const audio = document.querySelectorAll('audio');
 
     audio[0].play()
     audio[1].play()
   }
 
-
+ 
+  function controls() {
+    if (playSeekControl) {
+      return (
+          <div className='Controls no-border playBtn'>
+            <Button variant='outlined' onClick={play} className='PlayButton' >
+                {playPauseButtonText}
+            </Button>
+          </div>    
+      )
+    } else{
+      return (
+        <div className='Controls no-border playBtn'>
+          <CircularProgress />
+        </div>
+      )
+    }
+  }
 
   return (
-
     <div className="App">
-
       <div className = "Main">
 
-      
         <video width="80%" poster="" muted onEnded={onEnded} onWaiting={onVideoBuffering} onPlaying={onVideoPlaying} controls={showControls} onLoadedData={setVideoReady} onTimeUpdate={updateSeekBar}>
-        <source
-          src={videoSteams[0]}
-          type="video/mp4"
-          />
+          <source
+            src={videoSteams[0].url}
+            type="video/mp4"
+            />
         </video>
-
-        <audio id='audioStream' onEnded={onEnded} controls={showControls} onLoadedData={setAudioReady}>
+        <audio id='audioStream' onEnded={onEnded} controls={showControls} onLoadedData={setAudioReady} >
           <source  
-          src={audioStreams[0]}
+          src={audioStreams[0].url}
           type='audio/mp3'/>
         </audio>
 
-        <audio className='musicStream' onEnded={onEnded} controls={showControls} onLoadedData={setMusicReady}>
+        <audio className='musicStream' onEnded={onEnded} controls={showControls} onLoadedData={setMusicReady} >
           <source 
-          src={audioStreams[1]}
+          src={audioStreams[1].url}
           type='audio/mp3'/>
         </audio>
 
-      <div className='Controls'>
+        {controls()}
+
+        <div className='Controls no-border'>
+            <Slider size='large' aria-label="Duration slider" value={seekValue} valueLabelDisplay onChange={durationUpdate} max={Math.min(streamDurations[0], streamDurations[1], streamDurations[2])} />
+        </div>
+
+        {/* {playPauseButton()}
+        {seekBar()} */}
+
+      {/* <div className='Controls no-border playBtn'>
 
         <Button variant='outlined' onClick={play} className='PlayButton' >
             Play/Pause
@@ -218,15 +331,13 @@ function App() {
 
       </div>
 
+      <div className='Controls no-border'>
         <Slider size='large' aria-label="Duration slider" value={seekValue} valueLabelDisplay onChange={durationUpdate} max={Math.min(streamDurations[0], streamDurations[1], streamDurations[2])} />
-      {/* <div className='Controls'>
-
-
       </div> */}
 
 
 
-        <div className='Controls'>
+        <div className='Controls select-video'>
 
           <h3>Select Video Stream</h3>
 
@@ -236,12 +347,12 @@ function App() {
               labelId='videoSelect-label'
               id='videoSelect'
               label = "Select"
-              defaultValue={videoSteams[0]}
+              defaultValue={videoSteams[0].url}
               onClick={selectVideoStream}
             >
               {videoSteams.map((item, index) => {
                 return (
-                  <MenuItem key={index} value= {item}>{item}</MenuItem>
+                  <MenuItem key={index} value={item.url}>{item.name}</MenuItem>
                 )
               })}
             </Select>
@@ -261,12 +372,12 @@ function App() {
               labelId='audioSelect-label'
               id='audioSelect'
               label = "Select"
-              defaultValue={audioStreams[0]}
+              defaultValue={audioStreams[0].url}
               onClick={selectAudioStream}
             >
               {audioStreams.map((item, index) => {
                 return (
-                  <MenuItem key={index} value= {item}>{item}</MenuItem>
+                  <MenuItem key={index} value= {item.url}>{item.name}</MenuItem>
                 )
               })}
             </Select>
@@ -292,12 +403,12 @@ function App() {
               labelId='musicSelect-label'
               id='musicSelect'
               label = "Select"
-              defaultValue={audioStreams[1]}
+              defaultValue={musicStreams[1].url}
               onClick={selectMusicStream}
             >
-              {audioStreams.map((item, index) => {
+              {musicStreams.map((item, index) => {
                 return (
-                  <MenuItem  key={index} value={item}>{item}</MenuItem>
+                  <MenuItem  key={index} value={item.url}>{item.name}</MenuItem>
                 )
               })}
             </Select>

@@ -20,15 +20,38 @@
 
 .Controls{
   display: flex;
-  justify-content: center;
+  justify-content: left;
   margin: auto;
   gap: 4em;
   border-bottom: 1px solid grey;
   width: 80%;
-  padding-top: 2em;
+  /* padding-top: 2em;
   padding-bottom: 2em;
+  padding-left: 3em;
+  padding-right: 3em; */
+  padding: 2em 3em;
   align-items: center;
 }
+
+video {
+  border: 0.5px dotted grey;
+}
+
+.playBtn {
+  justify-content: center;
+}
+
+.select-video{
+  gap: 11.68%
+}
+
+.no-border{
+  border: 0;
+}
+
+/* .select-video{
+  justify-content: left;
+} */
 
 .formControl {
   width: 20em;
